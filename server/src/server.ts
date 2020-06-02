@@ -1,16 +1,21 @@
-import express from 'express'
+import express, { response } from 'express'
 
 const app = express()
 
-app.get('/users', (request, response) => {
+const users = ['Diego', 'Cleiton', 'Robson', 'Hehe']
 
+app.get('/users', (request, response) => {
   // JSON
-  response.json([
-    'Diego',
-    'Cleiton',
-    'Robson',
-    'Hehe'
-  ])
+  return response.json(users)
+})
+
+app.post('/users', (request, response) => {
+  const user = {
+    name: 'Diego',
+    email: 'diego@rocketseat.com.br'
+  }
+
+  return response.json(user)
 })
 
 app.listen(3333)
