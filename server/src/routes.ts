@@ -4,7 +4,7 @@ import knex from './database/connection'
 const routes = express.Router()
 
 routes.get('/items', async (request, response) => {
-  const items = await knex('items').select('*')
+  const items = await knex('item').select('*')
   const serializedItems = items.map(item => {
     return {
       id: item.id,
@@ -15,7 +15,7 @@ routes.get('/items', async (request, response) => {
   return response.json(serializedItems)
 })
 
-routes.post('/points', async (req, resp) => {
+routes.post('/point', async (req, resp) => {
   const {
     name,
     email,
@@ -26,8 +26,9 @@ routes.post('/points', async (req, resp) => {
     uf,
     items
   } = req.body
+
   try {
-    await knex('points').insert({
+    const ids = await knex('point').insert({
       image: 'image-fake',
       name,
       email,
@@ -37,11 +38,23 @@ routes.post('/points', async (req, resp) => {
       city,
       uf
     })
-  } catch (error) {
-    console.error(error)
-  }
 
-  return resp.json({ success: true })
+    const pointItems = items.map((item_id: number) => {
+      return {
+        item_id,
+        point_id: ids[0]
+      }
+    })
+
+    await knex('point_item').insert(pointItems);
+
+    return resp.json({ success: true })
+  } catch (error) {
+
+    console.error(error)
+    resp.json({ error })
+
+  }
 })
 
 export default routes

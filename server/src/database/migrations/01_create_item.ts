@@ -3,21 +3,10 @@ import Knex from 'knex'
 
 export async function up (knex: Knex) {
   //criar tabela
-  return knex.schema.createTable('points_items', table => {
+  return knex.schema.createTable('item', table => {
     table.increments('id').primary()
-
-    table
-      .integer('point_id')
-      .notNullable()
-      .references('id')
-      .inTable('points')
-
-    table
-      .integer('item_id')
-      .notNullable()
-      .references('id')
-      .inTable('items')
-
+    table.string('image').notNullable()
+    table.string('title').notNullable()
   })
 }
 
