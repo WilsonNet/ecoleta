@@ -4,11 +4,18 @@ GET http://localhost:3333/items/
 ###
 
 # Points
+GET http://localhost:3333/points?city=Rio%20do%20Sul&uf=SC&items=1,2,3
+
+###
+GET http://localhost:3333/points/1
+
+###
+
 POST http://localhost:3333/points
 Content-Type: application/json
 
 {
-    "name": "Mercado Imperatri",
+    "name": "7ercado Imperatri",
     "email": "contato@imperatriz.com.br",
     "whatsapp": "4799928383929",
     "latitude": "-42.4238942394",
@@ -18,6 +25,6 @@ Content-Type: application/json
     "items": [
       1,
       2,
-      6
+      4
     ]
 }
