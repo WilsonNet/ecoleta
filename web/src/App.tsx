@@ -1,10 +1,11 @@
 import React from 'react'
 import './App.css'
-import Header from './Header'
+import Routes from './routes'
 
 function App () {
-  return <Header title="Oieee"/>  
-
+  return (
+    <Routes/>
+  )
 }
 
 export default App
