@@ -3,10 +3,11 @@ import React from 'react'
 import './styles.css'
 import logo from '../../assets/logo.svg'
 import { FiLogIn } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <div id='home'>
+    <div id='page-home'>
       <div className='content'>
         <header>
           <img src={logo} alt='Ecoleta' />
@@ -17,12 +18,12 @@ const Home = () => {
             Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.
           </p>
 
-          <a href='/cadastro'>
+          <Link to='/cadastro'>
             <span>
               <FiLogIn />
             </span>
-          </a>
           <strong>Cadastre um ponto de coleta</strong>
+          </Link>
         </main>
       </div>
     </div>
