@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import './styles.css'
@@ -17,9 +17,14 @@ interface IBGEUFResponse {
   sigla: string
 }
 
+interface IBGECityResponse {
+  sigla: string
+}
+
 const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([])
   const [ufs, setufs] = useState<string[]>([])
+  const [selectedUf, setSelectedUf] = useState('0')
 
   useEffect(() => {
     api.get('items').then((response) => {
@@ -38,6 +43,23 @@ const CreatePoint = () => {
         setufs(ufInitials)
       })
   })
+
+  useEffect(() => {
+    if (selectedUf === '0') return
+    console.count('mudou')
+    axios
+      .get<IBGEUFResponse[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
+      )
+      .then((response) => {
+        const ufInitials = response.data.map((uf) => uf.sigla)
+        setufs(ufInitials)
+      })
+  }, [selectedUf])
+
+  const handleSelectUF = (evt: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedUf(evt.target.value)
+  }
 
   return (
     <div id="page-create-point">
@@ -87,7 +109,12 @@ const CreatePoint = () => {
           <div className="field-group">
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
-              <select name="uf" id="uf">
+              <select
+                onChange={handleSelectUF}
+                value={selectedUf}
+                name="uf"
+                id="uf"
+              >
                 <option value="0">Selecione uma UF</option>
                 {ufs.map((uf) => (
                   <option key={uf} value={uf}>
