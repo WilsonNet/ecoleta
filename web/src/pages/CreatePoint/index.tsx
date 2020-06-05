@@ -6,7 +6,7 @@ import logo from '../../assets/logo.svg'
 import { Map, TileLayer, Marker } from 'react-leaflet'
 import api from '../../services/api'
 import axios from 'axios'
-
+import { LeafletMouseEvent } from 'leaflet'
 interface Item {
   id: number
   title: string
@@ -27,6 +27,10 @@ const CreatePoint = () => {
   const [cityNames, setCityNames] = useState<string[]>([])
   const [selectedUf, setSelectedUf] = useState('0')
   const [selectedCity, setSelectedCity] = useState('0')
+  const [selectPosition, setSelectedPosition] = useState<[number, number]>([
+    0,
+    0,
+  ])
 
   useEffect(() => {
     api.get('items').then((response) => {
@@ -48,7 +52,6 @@ const CreatePoint = () => {
 
   useEffect(() => {
     if (selectedUf === '0') return
-    console.count('mudou')
     axios
       .get<IBGECityResponse[]>(
         `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
@@ -65,6 +68,10 @@ const CreatePoint = () => {
 
   const handleSelectCity = (evt: ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(evt.target.value)
+  }
+
+  const handleMapClick = (evt: LeafletMouseEvent) => {
+    setSelectedPosition([evt.latlng.lat, evt.latlng.lng])
   }
 
   return (
@@ -105,12 +112,16 @@ const CreatePoint = () => {
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
-          <Map center={[-27.209204, -49.6501092]} zoom={15}>
+          <Map
+            center={[-27.209204, -49.6501092]}
+            onclick={handleMapClick}
+            zoom={15}
+          >
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[-27.209204, -49.6501092]} />
+            {selectPosition !== [0, 0] && <Marker position={selectPosition} />}
           </Map>
           <div className="field-group">
             <div className="field">
@@ -131,7 +142,12 @@ const CreatePoint = () => {
             </div>
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select value={selectedCity} onChange={handleSelectCity} name="city" id="city">
+              <select
+                value={selectedCity}
+                onChange={handleSelectCity}
+                name="city"
+                id="city"
+              >
                 <option value="0">Selecione uma cidade</option>
                 {cityNames.map((cityName) => (
                   <option key={cityName} value={cityName}>
