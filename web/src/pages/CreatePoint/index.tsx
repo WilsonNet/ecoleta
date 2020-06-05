@@ -1,5 +1,5 @@
-import React, { useEffect, useState, ChangeEvent } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import './styles.css'
 import logo from '../../assets/logo.svg'
@@ -41,6 +41,8 @@ const CreatePoint = () => {
     email: '',
     whatsapp: '',
   })
+
+  const history = useHistory()
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -108,6 +110,27 @@ const CreatePoint = () => {
     }
   }
 
+  const handleSubmit = async (evt: FormEvent) => {
+    evt.preventDefault()
+    const { name, email, whatsapp } = formData
+    const uf = selectedUf
+    const city = selectedCity
+    const [latitude, longitude] = selectPosition
+    const items = selectedItems
+    const data = {
+      name,
+      email,
+      whatsapp,
+      uf,
+      city,
+      latitude,
+      longitude,
+      items,
+    }
+
+    await api.post('points', data)
+    history.push('/')
+  }
   return (
     <div id="page-create-point">
       <header>
@@ -117,7 +140,7 @@ const CreatePoint = () => {
           Voltar para home
         </Link>
       </header>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>
           Cadastro do <br /> ponto de coleta
         </h1>
