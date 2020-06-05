@@ -63,6 +63,10 @@ const CreatePoint = () => {
     setSelectedUf(evt.target.value)
   }
 
+  const handleSelectCity = (evt: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCity(evt.target.value)
+  }
+
   return (
     <div id="page-create-point">
       <header>
@@ -126,9 +130,14 @@ const CreatePoint = () => {
               </select>
             </div>
             <div className="field">
-              <label htmlFor="city">cidade</label>
-              <select name="city" id="city">
+              <label htmlFor="city">Cidade</label>
+              <select value={selectedCity} onChange={handleSelectCity} name="city" id="city">
                 <option value="0">Selecione uma cidade</option>
+                {cityNames.map((cityName) => (
+                  <option key={cityName} value={cityName}>
+                    {cityName}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
