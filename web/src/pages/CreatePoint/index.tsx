@@ -18,13 +18,15 @@ interface IBGEUFResponse {
 }
 
 interface IBGECityResponse {
-  sigla: string
+  nome: string
 }
 
 const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([])
   const [ufs, setufs] = useState<string[]>([])
+  const [cityNames, setCityNames] = useState<string[]>([])
   const [selectedUf, setSelectedUf] = useState('0')
+  const [selectedCity, setSelectedCity] = useState('0')
 
   useEffect(() => {
     api.get('items').then((response) => {
@@ -48,12 +50,12 @@ const CreatePoint = () => {
     if (selectedUf === '0') return
     console.count('mudou')
     axios
-      .get<IBGEUFResponse[]>(
+      .get<IBGECityResponse[]>(
         `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
       )
       .then((response) => {
-        const ufInitials = response.data.map((uf) => uf.sigla)
-        setufs(ufInitials)
+        const cityNames = response.data.map((city) => city.nome)
+        setCityNames(cityNames)
       })
   }, [selectedUf])
 
