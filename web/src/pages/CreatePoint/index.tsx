@@ -25,12 +25,24 @@ const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([])
   const [ufs, setufs] = useState<string[]>([])
   const [cityNames, setCityNames] = useState<string[]>([])
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0,
+    0,
+  ])
   const [selectedUf, setSelectedUf] = useState('0')
   const [selectedCity, setSelectedCity] = useState('0')
   const [selectPosition, setSelectedPosition] = useState<[number, number]>([
     0,
     0,
   ])
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords
+
+      setInitialPosition([latitude, longitude])
+    })
+  }, [])
 
   useEffect(() => {
     api.get('items').then((response) => {
@@ -113,7 +125,7 @@ const CreatePoint = () => {
             <span>Selecione o endereço no mapa</span>
           </legend>
           <Map
-            center={[-27.209204, -49.6501092]}
+            center={initialPosition}
             onclick={handleMapClick}
             zoom={15}
           >
