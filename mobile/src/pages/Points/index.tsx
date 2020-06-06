@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import Constants from 'expo-constants'
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import { SvgUri } from 'react-native-svg'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -12,6 +12,10 @@ const Points = () => {
 
   const handleNavigation = () => {
     navigation.goBack()
+  }
+
+  const handleNavigateToDetail = () => {
+    navigation.navigate('Detail')
   }
 
   return (
@@ -25,7 +29,35 @@ const Points = () => {
           Encontre no mapa um ponto de coleta.
         </Text>
         <View style={styles.mapContainer}>
-          <MapView style={styles.map} />
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: -25.4481276,
+              longitude: -49.2942842,
+              latitudeDelta: 0.014,
+              longitudeDelta: 0.014,
+            }}
+          >
+            <Marker
+              style={styles.mapMarker}
+              onPress={handleNavigateToDetail}
+              coordinate={{
+                latitude: -25.4481276,
+                longitude: -49.2942842,
+              }}
+            >
+              <View style={styles.mapMarkerContainer}>
+                <Image
+                  source={{
+                    uri:
+                      'https://images.unsplash.com/photo-1591035903010-d83ac023ee84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80',
+                  }}
+                  style={styles.mapMarkerImage}
+                ></Image>
+                <Text style={styles.mapMarkerTitle}>Mercado</Text>
+              </View>
+            </Marker>
+          </MapView>
         </View>
       </View>
       <View style={styles.itemsContainer}>
