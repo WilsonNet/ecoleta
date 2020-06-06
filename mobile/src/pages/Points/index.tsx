@@ -11,7 +11,7 @@ import api from '../../services/api'
 interface Item {
   id: number
   title: string
-  image_Url: string
+  image_url: string
 }
 
 const Points = () => {
@@ -78,17 +78,14 @@ const Points = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 20 }}
         >
-          {[1, 2, 3, 4, 5, 6].map((element) => (
+          {items.map((item) => (
             <TouchableOpacity
-              key={element}
+              key={item.id}
               style={styles.item}
               onPress={() => {}}
             >
-              <SvgUri
-                width={42}
-                uri={`http://192.168.0.23:3333/uploads/bateria.svg`}
-              />
-              <Text style={styles.itemTitle}>Lâmpadas</Text>
+              <SvgUri width={42} uri={item.image_url} />
+              <Text style={styles.itemTitle}>{item.title}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
