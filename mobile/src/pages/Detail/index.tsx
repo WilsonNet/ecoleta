@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { Feather as Icon } from '@expo/vector-icons'
+
 import Contants from 'expo-constants'
 import { useNavigation } from '@react-navigation/native'
 
@@ -15,7 +17,14 @@ const Detail = () => {
       <TouchableOpacity onPress={handleNavigation}>
         <Icon name="arrow-left" size={20} color="#34cb79" />
       </TouchableOpacity>
-      <Text></Text>
+
+      <Image
+        style={styles.pointImage}
+        source={{
+          uri:
+            'https://images.unsplash.com/photo-1591035903010-d83ac023ee84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80',
+        }}
+      />
     </View>
   )
 }
