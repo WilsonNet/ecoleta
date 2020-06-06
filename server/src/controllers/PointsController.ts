@@ -2,37 +2,40 @@ import knex from '../database/connection'
 import { Request, Response } from 'express'
 
 export default class PointsController {
-  async index (req: Request, resp: Response) {
+  async index(req: Request, resp: Response) {
     // cidade, uf, items
     const { city, uf, items } = req.query
 
     const parsedItems = String(items)
       .split(',')
-      .map(item => Number(item.trim()))
+      .map((item) => Number(item.trim()))
 
-    const points = await knex('point')
-      .join('point_item', 'point.id', '=', 'point_item.point_id')
-      .whereIn('point_item.item_id', parsedItems)
-      .where('city', String(city))
-      .where('uf', String(uf))
-      .distinct()
-      .select('point.*')
-
-    console.log(city, uf, items)
+    let points: any = {}
+    if (city && uf && items) {
+      points = await knex('point')
+        .join('point_item', 'point.id', '=', 'point_item.point_id')
+        .whereIn('point_item.item_id', parsedItems)
+        .where('city', String(city))
+        .where('uf', String(uf))
+        .distinct()
+        .select('point.*')
+    } else {
+      points = await knex('point')
+        .distinct()
+        .select('*')
+    }
 
     return resp.json(points)
   }
-  async show (req: Request, resp: Response) {
+  async show(req: Request, resp: Response) {
     const { id } = req.params
     console.log('PointsController -> show -> id', id)
     try {
-      const point = await knex('point')
-        .where('id', id)
-        .first()
+      const point = await knex('point').where('id', id).first()
 
       if (!point) {
         return resp.status(400).json({
-          message: 'Point not found.'
+          message: 'Point not found.',
         })
       }
 
@@ -48,7 +51,7 @@ export default class PointsController {
     }
   }
 
-  async create (req: Request, resp: Response) {
+  async create(req: Request, resp: Response) {
     const {
       name,
       email,
@@ -57,7 +60,7 @@ export default class PointsController {
       longitude,
       city,
       uf,
-      items
+      items,
     } = req.body
 
     const trx = await knex.transaction()
@@ -72,7 +75,7 @@ export default class PointsController {
         latitude,
         longitude,
         city,
-        uf
+        uf,
       }
 
       const insertedIds = await trx('point').insert(point)
@@ -82,7 +85,7 @@ export default class PointsController {
       const pointItems = items.map((item_id: number) => {
         return {
           item_id,
-          point_id
+          point_id,
         }
       })
 
