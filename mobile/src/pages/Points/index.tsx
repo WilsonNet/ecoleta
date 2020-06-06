@@ -1,11 +1,33 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import Constants from 'expo-constants'
+import { Feather as Icon } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import MapView from 'react-native-maps'
 
 const Points = () => {
+  const navigation = useNavigation()
+
+  const handleNavigation = () => {
+    navigation.goBack()
+  }
+
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleNavigation}>
+          <Icon name="arrow-left" size={20} color="#34cb79" />
+        </TouchableOpacity>
+        <Text style={styles.title}>🤔 Bem vindo.</Text>
+        <Text style={styles.description}>
+          Encontre no mapa um ponto de coleta.
+        </Text>
+        <View style={styles.mapContainer}>
+          <MapView style={styles.map} />
+        </View>
+      </View>
+      <View style={styles.itemsContainer}></View>
+    </>
   )
 }
 
@@ -44,7 +66,7 @@ const styles = StyleSheet.create({
 
   mapMarker: {
     width: 90,
-    height: 80, 
+    height: 80,
   },
 
   mapMarkerContainer: {
@@ -54,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderRadius: 8,
     overflow: 'hidden',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   mapMarkerImage: {
@@ -104,6 +126,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 13,
   },
-});
+})
 
 export default Points
