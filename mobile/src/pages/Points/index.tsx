@@ -4,6 +4,8 @@ import Constants from 'expo-constants'
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import MapView from 'react-native-maps'
+import { SvgUri } from 'react-native-svg'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const Points = () => {
   const navigation = useNavigation()
@@ -26,7 +28,27 @@ const Points = () => {
           <MapView style={styles.map} />
         </View>
       </View>
-      <View style={styles.itemsContainer}></View>
+      <View style={styles.itemsContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+        >
+          {[1, 2, 3, 4, 5, 6].map((element) => (
+            <TouchableOpacity
+              key={element}
+              style={styles.item}
+              onPress={() => {}}
+            >
+              <SvgUri
+                width={42}
+                uri={`http://192.168.0.23:3333/uploads/bateria.svg`}
+              />
+              <Text style={styles.itemTitle}>Lâmpadas</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </>
   )
 }
