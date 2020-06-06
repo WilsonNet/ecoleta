@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import Constants from 'expo-constants'
 import { Feather as Icon } from '@expo/vector-icons'
@@ -6,17 +6,29 @@ import { useNavigation } from '@react-navigation/native'
 import MapView, { Marker } from 'react-native-maps'
 import { SvgUri } from 'react-native-svg'
 import { ScrollView } from 'react-native-gesture-handler'
+import api from '../../services/api'
+
+interface Item {
+  id: number
+  title: string
+  image_Url: string
+}
 
 const Points = () => {
   const navigation = useNavigation()
+  const [items, setItems] = useState<Item[]>([])
+
+  useEffect(() => {
+    api.get('items').then((response) => {
+      setItems(response.data)
+    })
+  }, [])
 
   const handleNavigation = () => {
     navigation.goBack()
   }
 
-  const handleNavigateToDetail = () => {
-    navigation.navigate('Detail')
-  }
+  const handleNavigateToDetail = () => {}
 
   return (
     <>
