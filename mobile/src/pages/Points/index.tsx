@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import Constants from 'expo-constants'
 import { Feather as Icon } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MapView, { Marker } from 'react-native-maps'
 import { SvgUri } from 'react-native-svg'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -39,7 +39,7 @@ const Points = () => {
     0,
   ])
   const [points, setPoints] = useState<Points[]>([])
-
+  
   useEffect(() => {
     async function loadPosition() {
       const { status } = await Location.requestPermissionsAsync()
@@ -84,7 +84,9 @@ const Points = () => {
     navigation.goBack()
   }
 
-  const handleNavigateToDetail = () => {}
+  const handleNavigateToDetail = (pointId: number) => {
+    navigation.navigate('Detail', { point_id: pointId })
+  }
 
   const handleSelectItem = (id: number) => {
     const alreadySelected = selectedItems.findIndex((item) => item === id)
@@ -123,7 +125,7 @@ const Points = () => {
                 <Marker
                   key={String(point.id)}
                   style={styles.mapMarker}
-                  onPress={handleNavigateToDetail}
+                  onPress={() => handleNavigateToDetail(point.id)}
                   coordinate={{
                     latitude: Number(point.latitude),
                     longitude: Number(point.longitude),
