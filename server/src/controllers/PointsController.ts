@@ -20,9 +20,7 @@ export default class PointsController {
         .distinct()
         .select('point.*')
     } else {
-      points = await knex('point')
-        .distinct()
-        .select('*')
+      points = await knex('point').distinct().select('*')
     }
 
     return resp.json(points)
@@ -82,12 +80,15 @@ export default class PointsController {
 
       const point_id = insertedIds[0]
 
-      const pointItems = items.map((item_id: number) => {
-        return {
-          item_id,
-          point_id,
-        }
-      })
+      const pointItems = items
+        .split(',')
+        .map((item: string) => Number(item.trim()))
+        .map((item_id: number) => {
+          return {
+            item_id,
+            point_id,
+          }
+        })
 
       await trx('point_item').insert(pointItems)
       await trx.commit()
