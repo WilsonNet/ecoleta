@@ -39,7 +39,7 @@ const Points = () => {
     0,
   ])
   const [points, setPoints] = useState<Points[]>([])
-  
+
   useEffect(() => {
     async function loadPosition() {
       const { status } = await Location.requestPermissionsAsync()
@@ -76,7 +76,6 @@ const Points = () => {
       })
       .then((response) => {
         setPoints(response.data)
-        console.log('Points -> response.data', response.data)
       })
   }, [])
 
