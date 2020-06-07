@@ -23,11 +23,17 @@ export default class PointsController {
       points = await knex('point').distinct().select('*')
     }
 
-    return resp.json(points)
+    const serializedItems = points.map((point) => {
+      return {
+        ...point,
+        image_url: `http://192.168.0.23:3333/uploads/${point.image}`,
+      }
+    })
+
+    return resp.json(serializedItems)
   }
   async show(req: Request, resp: Response) {
     const { id } = req.params
-    console.log('PointsController -> show -> id', id)
     try {
       const point = await knex('point').where('id', id).first()
 
@@ -36,13 +42,17 @@ export default class PointsController {
           message: 'Point not found.',
         })
       }
+      const serializedPoint = {
+        ...point,
+        image_url: `http://192.168.0.23:3333/uploads/${point.image}`,
+      }
 
       const items = await knex('item')
         .join('point_item', 'item.id', '=', 'point_item.item_id')
         .where('point_item.point_id', id)
         .select('item.title')
 
-      return resp.json({ point, items })
+      return resp.json({ serializedPoint, items })
     } catch (error) {
       console.error(error)
       return resp.json({ error })
@@ -65,8 +75,7 @@ export default class PointsController {
     try {
       // Transaction for dependent queries
       const point = {
-        image:
-          'https://images.unsplash.com/photo-1591035903010-d83ac023ee84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80',
+        image: req.file.filename,
         name,
         email,
         whatsapp,
