@@ -60,6 +60,7 @@ export default class PointsController {
   }
 
   async create(req: Request, resp: Response) {
+    console.log('oii', req.body)
     const {
       name,
       email,
@@ -75,7 +76,7 @@ export default class PointsController {
     try {
       // Transaction for dependent queries
       const point = {
-        image: req.file.filename,
+        image:req.file.filename,
         name,
         email,
         whatsapp,
